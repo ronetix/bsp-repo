@@ -1,4 +1,4 @@
-= FSL Community BSP
+= Ronetix FSL community based BSP platform for i.MX7-CM and i.MX8M-CM
 
 To get the BSP you need to have `repo` installed and use it as:
 
@@ -9,59 +9,52 @@ $: mkdir ~/bin
 $: curl http://commondatastorage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
 $: chmod a+x ~/bin/repo
 
+[source,console]
+$: sudo apt install bmap-tools
+
 Download the BSP source:
 
 [source,console]
 $: PATH=${PATH}:~/bin
-$: mkdir fsl-community-bsp
-$: cd fsl-community-bsp
-$: repo init -u https://github.com/Freescale/fsl-community-bsp-platform -b master
+$: mkdir yocto-ronetix
+$: cd yocto-ronetix
+$: repo init -u https://github.com/ronetix/bsp-repo -b zeus
 $: repo sync
 
 At the end of the commands you have every metadata you need to start work with.
 
-To start a simple image build:
+i.MX7-CM: to start a simple image build:
+----------------------------------------
 
 [source,console]
-$: source ./setup-environment build
-$: bitbake core-image-minimal
+$: MACHINE=imx7-cm DISTRO=fslc-x11 . setup-environment build_x11
+$: bitbake fsl-image-gui
 
-You can use any directory to host your build.
+Creating a bootable SD card:
 
-The source code is checked out at `fsl-community-bsp/sources`.
+[source,console]
+umount /dev/sdc1
+umount /dev/sdc2
+sudo bmaptool copy tmp/deploy/images/imx7-cm/fsl-image-gui-imx7-cm.wic.gz /dev/sdc
+
+
+i.MX8M-CM: to start a simple image build:
+-----------------------------------------
+
+[source,console]
+$: MACHINE=imx8m_cm DISTRO=fslc-xwayland . setup-environment build_xwayland_mx8m_cm
+$: bitbake fsl-image-ronetix
+
+Creating a bootable SD card:
+
+[source,console]
+umount /dev/sdc1
+umount /dev/sdc2
+sudo bmaptool copy tmp/deploy/images/imx8m-cm/fsl-image-ronetix-imx8m-cm.wic.gz /dev/sdc
 
 == Contributing
 
-To contribute to this layer you should send the patches for review to the mailing list.
+To contribute to this layer you should send the patches for review to: support [AT] ronetix.at
 
-Mailing list::
-    https://lists.yoctoproject.org/listinfo/meta-freescale
 
-Source code::
-    https://github.com/Freescale/fsl-community-bsp-platform
 
-When creating patches, please use something like:
-
-[source,console]
-$: git format-patch -s --subject-prefix='fsl-community-bsp-platform][PATCH' origin
-
-When sending patches, please use something like:
-
-[source,console]
-$: git send-email --to meta-freescale@yoctoproject.org <generated patch>
-
-== Using Development and Testing Branches
-
-Replace the `repo init` command above with one of the following:
-
-master:: For developers
-+
-[source,console]
-$: repo init -u https://github.com/Freescale/fsl-community-bsp-platform -b master
-
-master-next:: For intrepid developers and testers
-+
-Patches are typically merged into master-next and then are merged into master after a testing and comment period. It's possible that master-next has something you want or need. But it's also possible that using master-next breaks something that was working before. Use with caution.
-
-[source,console]
-$: repo init -u https://github.com/Freescale/fsl-community-bsp-platform -b master-next
