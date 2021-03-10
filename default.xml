@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest>
 
-  <default sync-j="4" revision="zeus"/>
+  <default sync-j="4" revision="dunfell"/>
 
   <remote fetch="https://git.yoctoproject.org/git" name="yocto"/>
   <remote fetch="https://github.com/Freescale" name="freescale"/>
   <remote fetch="https://github.com/openembedded" name="oe"/>
   <remote fetch="https://github.com/ronetix" name="ronetix"/>
 
-  <project remote="yocto" revision="zeus" name="poky" path="sources/poky"/>
-  <project remote="yocto" revision="zeus" name="meta-freescale" path="sources/meta-freescale"/>
+  <project remote="yocto" revision="dunfell" name="poky" path="sources/poky"/>
+  <project remote="yocto" revision="dunfell" name="meta-freescale" path="sources/meta-freescale"/>
 
-  <project remote="oe" revision="zeus" name="meta-openembedded" path="sources/meta-openembedded"/>
+  <project remote="oe" revision="dunfell" name="meta-openembedded" path="sources/meta-openembedded"/>
 
-  <project remote="ronetix" revision="zeus" name="bsp-base" path="sources/base">
-	<linkfile dest="README" src="README"/>
-	<linkfile dest="setup-environment" src="setup-environment"/>
+  <project remote="ronetix" revision="dunfell" name="bsp-base" path="sources/base">
+	  <linkfile dest="README" src="README"/>
+	  <linkfile dest="setup-environment" src="setup-environment"/>
   </project>
 
-  <project remote="freescale" revision="zeus" name="meta-freescale-3rdparty" path="sources/meta-freescale-3rdparty"/>
-  <project remote="freescale" revision="zeus" name="meta-freescale-distro" path="sources/meta-freescale-distro"/>
-  <project remote="freescale" revision="zeus" name="Documentation" path="sources/Documentation"/>
-  <project remote="ronetix"   revision="zeus" name="meta-ronetix" path="sources/meta-ronetix"/>
+  <project remote="freescale" revision="dunfell" name="meta-freescale-3rdparty" path="sources/meta-freescale-3rdparty"/>
+  <project remote="freescale" revision="dunfell" name="meta-freescale-distro" path="sources/meta-freescale-distro"/>
+  <project remote="freescale" revision="dunfell" name="Documentation" path="sources/Documentation"/>
+  <project remote="ronetix"   revision="dunfell" name="meta-ronetix" path="sources/meta-ronetix"/>
 
 </manifest>

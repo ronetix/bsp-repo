@@ -18,7 +18,7 @@ Download the BSP source:
 $: PATH=${PATH}:~/bin
 $: mkdir yocto-ronetix
 $: cd yocto-ronetix
-$: repo init -u https://github.com/ronetix/bsp-repo -b zeus
+$: repo init -u https://github.com/ronetix/bsp-repo -b dunfell
 $: repo sync
 
 At the end of the commands you have every metadata you need to start work with.
@@ -55,6 +55,3 @@ sudo bmaptool copy tmp/deploy/images/imx8m-cm/fsl-image-ronetix-imx8m-cm.wic.gz 
 == Contributing
 
 To contribute to this layer you should send the patches for review to: support [AT] ronetix.at
-
-
-
