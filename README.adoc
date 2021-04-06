@@ -39,6 +39,10 @@ umount /dev/sdc1
 umount /dev/sdc2
 sudo bmaptool copy tmp/deploy/images/imx7-cm/fsl-image-gui-imx7-cm.wic.gz /dev/sdc
 
+Boot mode jumpers on base board i.MX7-MB for for booting from SD card:
+
+* SW1[8:1]: ON ON ON ON - ON OFF ON ON
+* J6: 1,2 - open; 3,4 - close
 
 i.MX8M-CM: to start a simple image build:
 -----------------------------------------
