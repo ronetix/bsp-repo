@@ -27,7 +27,7 @@ i.MX7-CM: to start a simple image build:
 ----------------------------------------
 
 [source,console]
-$: MACHINE=imx7-cm DISTRO=fslc-x11 . setup-environment build_x11
+$: MACHINE=imx7-cm DISTRO=fslc-x11 . setup-environment build_x11_mx7_cm
 $: bitbake fsl-image-gui
 
 Creating a bootable SD card:
@@ -42,15 +42,15 @@ i.MX8M-CM: to start a simple image build:
 -----------------------------------------
 
 [source,console]
-$: MACHINE=imx8m_cm DISTRO=fslc-xwayland . setup-environment build_xwayland_mx8m_cm
-$: bitbake fsl-image-ronetix
+$: MACHINE=imx8mq-cm DISTRO=fslc-xwayland . setup-environment build_xwayland_mx8mq_cm
+$: bitbake fsl-image-gui
 
 Creating a bootable SD card:
 
 [source,console]
 umount /dev/sdc1
 umount /dev/sdc2
-sudo bmaptool copy tmp/deploy/images/imx8m-cm/fsl-image-ronetix-imx8m-cm.wic.gz /dev/sdc
+sudo bmaptool copy tmp/deploy/images/imx8mq-cm/fsl-image-gui-imx8mq-cm.wic.gz /dev/sdc
 
 == Contributing
 
