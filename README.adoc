@@ -39,7 +39,7 @@ umount /dev/sdc1
 umount /dev/sdc2
 sudo bmaptool copy tmp/deploy/images/imx7-cm/fsl-image-gui-imx7-cm.wic.gz /dev/sdc
 
-Boot mode jumpers on base board i.MX7-MB for for booting from SD card:
+Boot mode jumpers on base board i.MX7-MB for booting from SD card:
 
 * SW1[8:1]: ON ON ON ON - ON OFF ON ON
 * J6: 1,2 - open; 3,4 - close
@@ -57,6 +57,12 @@ Creating a bootable SD card:
 umount /dev/sdc1
 umount /dev/sdc2
 sudo bmaptool copy tmp/deploy/images/imx8mq-cm/fsl-image-gui-imx8mq-cm.wic.gz /dev/sdc
+
+Boot mode jumpers on base board i.MX8M-MB for booting from SD card:
+
+* SW1[8:1]: OFF OFF OFF ON - OFF ON OFF OFF
+* SW4[2:1]: OFF OFF
+* J4: 1,2 - open; 3,4 - close; 5,6 - open
 
 == Contributing
 
