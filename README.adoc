@@ -38,8 +38,8 @@ umount /dev/sdc2
 sudo bmaptool copy tmp/deploy/images/imx7-cm/fsl-image-gui-imx7-cm.wic.gz /dev/sdc
 
 
-i.MX8M-CM: to start a simple image build:
------------------------------------------
+i.MX8M-CM (CPU: i.MX8MQ): to start a simple image build:
+--------------------------------------------------------
 
 [source,console]
 $: MACHINE=imx8m_cm DISTRO=fslc-xwayland . setup-environment build_xwayland_mx8m_cm
@@ -51,6 +51,21 @@ Creating a bootable SD card:
 umount /dev/sdc1
 umount /dev/sdc2
 sudo bmaptool copy tmp/deploy/images/imx8m-cm/fsl-image-ronetix-imx8m-cm.wic.gz /dev/sdc
+
+i.MX8MM-CM (CPU: i.MX8M Mini): to start a simple image build:
+-------------------------------------------------------------
+
+[source,console]
+$: MACHINE=imx8mm_cm DISTRO=fslc-xwayland . setup-environment build_xwayland_mx8mm_cm
+$: bitbake fsl-image-ronetix
+
+Creating a bootable SD card:
+
+[source,console]
+umount /dev/sdc1
+umount /dev/sdc2
+sudo bmaptool copy tmp/deploy/images/imx8mm-cm/fsl-image-ronetix-imx8mm-cm.wic.gz /dev/sdc
+
 
 == Contributing
 
