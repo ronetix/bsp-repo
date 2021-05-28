@@ -88,6 +88,26 @@ Boot mode jumpers on base board i.MX8M-MB for booting from SD card:
 * SW4[2:1]: OFF OFF
 * J4: 1,2 - open; 3,4 - close; 5,6 - open
 
+i.MX8MM-COMPACT-CM (CPU: i.MX8M Mini): to start a simple image build:
+---------------------------------------------------------------------
+
+[source,console]
+$: MACHINE=imx8mm-compact-cm DISTRO=fslc-xwayland . setup-environment build_xwayland_mx8mm_compact_cm
+$: bitbake fsl-image-gui
+
+Creating a bootable SD card:
+
+[source,console]
+umount /dev/sdc1
+umount /dev/sdc2
+sudo bmaptool copy tmp/deploy/images/imx8mm-compact-cm/fsl-image-gui-imx8mm-compact-cm.wic.gz /dev/sdc
+
+Boot mode jumpers on base board i.MX8MM-COMPACT-MB for booting from SD card:
+
+* SW1[8:1]: OFF OFF OFF ON - OFF ON OFF OFF
+* SW4[2:1]: OFF OFF
+* J4: 1,2 - open; 3,4 - close; 5,6 - open
+
 == Contributing
 
 To contribute to this layer you should send the patches for review to: support [AT] ronetix.at
