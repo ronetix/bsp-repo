@@ -1,8 +1,11 @@
-= Ronetix FSL community based BSP platform for:
+= Ronetix FSL community based YOCTO BSP platform for:
   
 == i.MX7-CM - SoM with i.MX7D
 == i.MX8M-CM - SoM with i.MX8MQ
 == i.MX8MM-CM - SoM with i.MX8M Mini
+== i.MX8MN-CM - SoM with i.MX8M Nano
+== i.MX8MM-COMPACT-CM - SoM with i.MX8M Mini
+== i.MX8MN-COMPACT-CM - SoM with i.MX8M Nano
 
 To get the BSP you need to have `repo` installed and use it as:
 
@@ -27,8 +30,8 @@ $: repo sync
 
 At the end of the commands you have every metadata you need to start work with.
 
-i.MX7-CM: to start a simple image build:
-----------------------------------------
+i.MX7-CM (CPU: i.MX7D)
+----------------------
 
 [source,console]
 $: MACHINE=imx7-cm DISTRO=fslc-x11 . setup-environment build_x11_mx7_cm
@@ -48,8 +51,8 @@ Boot mode jumpers on base board i.MX7-MB for booting from SD card:
 * SW1[8:1]: ON ON ON ON - ON OFF ON ON
 * J6: 1,2 - open; 3,4 - close
 
-i.MX8M-CM (CPU: i.MX8MQ): to start a simple image build:
---------------------------------------------------------
+i.MX8M-CM (CPU: i.MX8MQ)
+------------------------
 
 [source,console]
 $: MACHINE=imx8mq-cm DISTRO=fslc-xwayland . setup-environment build_xwayland_mx8mq_cm
@@ -68,8 +71,8 @@ Boot mode jumpers on base board i.MX8M-MB for booting from SD card:
 * SW4[2:1]: OFF OFF
 * J4: 1,2 - open; 3,4 - close; 5,6 - open
 
-i.MX8MM-CM (CPU: i.MX8M Mini): to start a simple image build:
--------------------------------------------------------------
+i.MX8MM-CM (CPU: i.MX8M Mini)
+-----------------------------
 
 [source,console]
 $: MACHINE=imx8mm-cm DISTRO=fslc-xwayland . setup-environment build_xwayland_mx8mm_cm
@@ -88,8 +91,29 @@ Boot mode jumpers on base board i.MX8M-MB for booting from SD card:
 * SW4[2:1]: OFF OFF
 * J4: 1,2 - open; 3,4 - close; 5,6 - open
 
-i.MX8MM-COMPACT-CM (CPU: i.MX8M Mini): to start a simple image build:
----------------------------------------------------------------------
+i.MX8MN-CM (CPU: i.MX8M Nano)
+-----------------------------
+
+[source,console]
+$: MACHINE=imx8mn-cm DISTRO=fslc-xwayland . setup-environment build_xwayland_mx8mn_cm
+$: bitbake fsl-image-gui
+
+Creating a bootable SD card:
+
+[source,console]
+umount /dev/sdc1
+umount /dev/sdc2
+sudo bmaptool copy tmp/deploy/images/imx8mn-cm/fsl-image-gui-imx8mn-cm.wic.gz /dev/sdc
+
+Boot mode jumpers on base board i.MX8M-MB for booting from SD card:
+
+* SW1[8:1]: OFF OFF OFF ON - OFF ON OFF OFF
+* SW4[2:1]: OFF OFF
+* J4: 1,2 - open; 3,4 - close; 5,6 - open
+
+
+i.MX8MM-COMPACT-CM (CPU: i.MX8M Mini)
+-------------------------------------
 
 [source,console]
 $: MACHINE=imx8mm-compact-cm DISTRO=fslc-xwayland . setup-environment build_xwayland_mx8mm_compact_cm
@@ -101,6 +125,26 @@ Creating a bootable SD card:
 umount /dev/sdc1
 umount /dev/sdc2
 sudo bmaptool copy tmp/deploy/images/imx8mm-compact-cm/fsl-image-gui-imx8mm-compact-cm.wic.gz /dev/sdc
+
+Boot mode jumpers on base board i.MX8MM-COMPACT-MB for booting from SD card:
+
+* SW1[8:1]: OFF OFF OFF ON - OFF ON OFF OFF
+* SW4[2:1]: OFF OFF
+* J4: 1,2 - open; 3,4 - close; 5,6 - open
+
+i.MX8MN-COMPACT-CM (CPU: i.MX8M Nano)
+-------------------------------------
+
+[source,console]
+$: MACHINE=imx8mn-compact-cm DISTRO=fslc-xwayland . setup-environment build_xwayland_mx8mn_compact_cm
+$: bitbake fsl-image-gui
+
+Creating a bootable SD card:
+
+[source,console]
+umount /dev/sdc1
+umount /dev/sdc2
+sudo bmaptool copy tmp/deploy/images/imx8mn-compact-cm/fsl-image-gui-imx8mn-compact-cm.wic.gz /dev/sdc
 
 Boot mode jumpers on base board i.MX8MM-COMPACT-MB for booting from SD card:
 
