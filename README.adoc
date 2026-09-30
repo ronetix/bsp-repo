@@ -1,4 +1,16 @@
-= FSL Community BSP
+== Ronetix FSL community based YOCTO BSP platform for:
+
+=== i.MX7-CM - SoM with i.MX7D
+=== i.MX8M-CM - SoM with i.MX8MQ
+=== i.MX8MM-CM - SoM with i.MX8M Mini
+=== i.MX8MN-CM - SoM with i.MX8M Nano
+=== i.MX8MM-COMPACT-CM - SoM with i.MX8M Mini, 1 GB LPDDR4
+=== i.MX8MM-COMPACT-2GB-CM - SoM with i.MX8M Mini, 2 GB LPDDR4
+=== i.MX8MN-COMPACT-CM - SoM with i.MX8M Nano
+
+Yocto Project wrynose with the FSL Community BSP. U-Boot 2025.01 from
+https://github.com/ronetix/u-boot (branch ronetix/v2025.01) and Linux 6.12
+from https://github.com/ronetix/linux (branch ronetix/6.12.x+fslc).
 
 To get the BSP you need to have `repo` installed and use it as:
 
@@ -6,59 +18,172 @@ Install the `repo` utility:
 
 [source,console]
 $: mkdir ~/bin
-$: curl http://commondatastorage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
+$: curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
 $: chmod a+x ~/bin/repo
+
+[source,console]
+$: sudo apt install bmap-tools
 
 Download the BSP source:
 
 [source,console]
 $: PATH=${PATH}:~/bin
-$: mkdir fsl-community-bsp
-$: cd fsl-community-bsp
-$: repo init -u https://github.com/Freescale/fsl-community-bsp-platform -b wrynose
+$: mkdir yocto-ronetix
+$: cd yocto-ronetix
+$: repo init -u https://github.com/ronetix/bsp-repo -b wrynose
 $: repo sync
 
 At the end of the commands you have every metadata you need to start work with.
 
-To start a simple image build:
+`setup-environment` asks to accept the NXP EULA when a build directory is
+created. It is required for the DDR training firmware of the i.MX8M SoMs.
+
+The images are development images: root logs in without password. See
+`sources/meta-ronetix/README.md` for production images.
+
+i.MX7-CM (CPU: i.MX7D)
+----------------------
 
 [source,console]
-$: source ./setup-environment build
-$: bitbake core-image-minimal
+$: MACHINE=imx7-cm DISTRO=fslc-x11 . setup-environment build_x11_mx7_cm
+$: bitbake fsl-image-gui
 
-You can use any directory to host your build.
+Creating a bootable SD card:
 
-The source code is checked out at `fsl-community-bsp/sources`.
+[source,console]
+umount /dev/sdc1
+umount /dev/sdc2
+sudo bmaptool copy tmp/deploy/images/imx7-cm/fsl-image-gui-imx7-cm.rootfs.wic.gz /dev/sdc
+
+Boot mode jumpers on base board i.MX7-MB for booting from SD card:
+
+* SW1[8:1]: ON ON ON ON - ON OFF ON ON
+* J6: 1,2 - open; 3,4 - close
+
+i.MX8M-CM (CPU: i.MX8MQ)
+------------------------
+
+[source,console]
+$: MACHINE=imx8mq-cm DISTRO=fslc-wayland . setup-environment build_wayland_mx8mq_cm
+$: bitbake fsl-image-gui
+
+Creating a bootable SD card:
+
+[source,console]
+umount /dev/sdc1
+umount /dev/sdc2
+sudo bmaptool copy tmp/deploy/images/imx8mq-cm/fsl-image-gui-imx8mq-cm.rootfs.wic.gz /dev/sdc
+
+Boot mode jumpers on base board i.MX8M-MB for booting from SD card:
+
+* SW1[8:1]: OFF OFF OFF ON - OFF ON OFF OFF
+* SW4[2:1]: OFF OFF
+* J4: 1,2 - open; 3,4 - close; 5,6 - open
+
+i.MX8MM-CM (CPU: i.MX8M Mini)
+-----------------------------
+
+[source,console]
+$: MACHINE=imx8mm-cm DISTRO=fslc-wayland . setup-environment build_wayland_mx8mm_cm
+$: bitbake fsl-image-gui
+
+NOTE: U-Boot for this SoM is not yet ported to U-Boot 2025.01.
+
+Creating a bootable SD card:
+
+[source,console]
+umount /dev/sdc1
+umount /dev/sdc2
+sudo bmaptool copy tmp/deploy/images/imx8mm-cm/fsl-image-gui-imx8mm-cm.rootfs.wic.gz /dev/sdc
+
+Boot mode jumpers on base board i.MX8M-MB for booting from SD card:
+
+* SW1[8:1]: OFF OFF OFF ON - OFF ON OFF OFF
+* SW4[2:1]: OFF OFF
+* J4: 1,2 - open; 3,4 - close; 5,6 - open
+
+i.MX8MN-CM (CPU: i.MX8M Nano)
+-----------------------------
+
+[source,console]
+$: MACHINE=imx8mn-cm DISTRO=fslc-wayland . setup-environment build_wayland_mx8mn_cm
+$: bitbake fsl-image-gui
+
+NOTE: U-Boot for this SoM is not yet ported to U-Boot 2025.01.
+
+Creating a bootable SD card:
+
+[source,console]
+umount /dev/sdc1
+umount /dev/sdc2
+sudo bmaptool copy tmp/deploy/images/imx8mn-cm/fsl-image-gui-imx8mn-cm.rootfs.wic.gz /dev/sdc
+
+Boot mode jumpers on base board i.MX8M-MB for booting from SD card:
+
+* SW1[8:1]: OFF OFF OFF ON - OFF ON OFF OFF
+* SW4[2:1]: OFF OFF
+* J4: 1,2 - open; 3,4 - close; 5,6 - open
+
+i.MX8MM-COMPACT-CM (CPU: i.MX8M Mini, 1 GB LPDDR4)
+--------------------------------------------------
+
+[source,console]
+$: MACHINE=imx8mm-compact-cm DISTRO=fslc-wayland . setup-environment build_wayland_mx8mm_compact_cm
+$: bitbake fsl-image-gui
+
+Creating a bootable SD card:
+
+[source,console]
+umount /dev/sdc1
+umount /dev/sdc2
+sudo bmaptool copy tmp/deploy/images/imx8mm-compact-cm/fsl-image-gui-imx8mm-compact-cm.rootfs.wic.gz /dev/sdc
+
+Boot mode jumpers on base board i.MX8MM-COMPACT-MB for booting from SD card:
+
+* SW1[8:1]: OFF OFF OFF ON - OFF ON OFF OFF
+* SW4[2:1]: OFF OFF
+* J4: 1,2 - open; 3,4 - close; 5,6 - open
+
+i.MX8MM-COMPACT-2GB-CM (CPU: i.MX8M Mini, 2 GB LPDDR4)
+------------------------------------------------------
+
+[source,console]
+$: MACHINE=imx8mm-compact-2gb-cm DISTRO=fslc-wayland . setup-environment build_wayland_mx8mm_compact_2gb_cm
+$: bitbake fsl-image-gui
+
+Creating a bootable SD card:
+
+[source,console]
+umount /dev/sdc1
+umount /dev/sdc2
+sudo bmaptool copy tmp/deploy/images/imx8mm-compact-2gb-cm/fsl-image-gui-imx8mm-compact-2gb-cm.rootfs.wic.gz /dev/sdc
+
+Boot mode jumpers on base board i.MX8MM-COMPACT-MB for booting from SD card:
+
+* SW1[8:1]: OFF OFF OFF ON - OFF ON OFF OFF
+* SW4[2:1]: OFF OFF
+* J4: 1,2 - open; 3,4 - close; 5,6 - open
+
+i.MX8MN-COMPACT-CM (CPU: i.MX8M Nano)
+-------------------------------------
+
+[source,console]
+$: MACHINE=imx8mn-compact-cm DISTRO=fslc-wayland . setup-environment build_wayland_mx8mn_compact_cm
+$: bitbake fsl-image-gui
+
+Creating a bootable SD card:
+
+[source,console]
+umount /dev/sdc1
+umount /dev/sdc2
+sudo bmaptool copy tmp/deploy/images/imx8mn-compact-cm/fsl-image-gui-imx8mn-compact-cm.rootfs.wic.gz /dev/sdc
+
+Boot mode jumpers on base board i.MX8MM-COMPACT-MB for booting from SD card:
+
+* SW1[8:1]: OFF OFF OFF ON - OFF ON OFF OFF
+* SW4[2:1]: OFF OFF
+* J4: 1,2 - open; 3,4 - close; 5,6 - open
 
 == Contributing
 
-To contribute to this BSP, open a GitHub Pull Request from your fork.
-
-Source code::
-    https://github.com/Freescale/fsl-community-bsp-platform
-
-== Using Development and Testing Branches
-
-Replace the `repo init` command above with one of the supported branches below:
-
-wrynose:: Stable release (recommended), based on the Yocto Project 6.0 LTS
-+
-[source,console]
-$: repo init -u https://github.com/Freescale/fsl-community-bsp-platform -b wrynose
-
-scarthgap:: Long Term Support release, based on the Yocto Project 5.0 LTS, receiving critical updates only
-+
-[source,console]
-$: repo init -u https://github.com/Freescale/fsl-community-bsp-platform -b scarthgap
-
-master:: For developers
-+
-[source,console]
-$: repo init -u https://github.com/Freescale/fsl-community-bsp-platform -b master
-
-master-next:: For intrepid developers and testers
-+
-Patches are typically merged into master-next and then are merged into master after a testing and comment period. It's possible that master-next has something you want or need. But it's also possible that using master-next breaks something that was working before. Use with caution.
-
-[source,console]
-$: repo init -u https://github.com/Freescale/fsl-community-bsp-platform -b master-next
+To contribute to this layer you should send the patches for review to: support [AT] ronetix.at
