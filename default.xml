@@ -6,6 +6,7 @@
   <remote fetch="https://git.yoctoproject.org" name="yocto"/>
   <remote fetch="https://github.com/Freescale" name="freescale"/>
   <remote fetch="https://github.com/openembedded" name="oe"/>
+  <remote fetch="https://github.com/ronetix" name="ronetix"/>
 
   <project remote="oe" name="bitbake" path="sources/bitbake" revision="2.18"/>
   <project remote="oe" name="openembedded-core" path="sources/openembedded-core"/>
@@ -15,12 +16,14 @@
 
   <project remote="oe" name="meta-openembedded" path="sources/meta-openembedded"/>
 
-  <project remote="freescale" name="fsl-community-bsp-base" path="sources/base">
+  <project remote="ronetix" name="bsp-base" path="sources/base">
 	<linkfile dest="README" src="README"/>
 	<linkfile dest="setup-environment" src="setup-environment"/>
   </project>
 
   <project remote="freescale" name="meta-freescale-3rdparty" path="sources/meta-freescale-3rdparty"/>
   <project remote="freescale" name="meta-freescale-distro" path="sources/meta-freescale-distro"/>
+
+  <project remote="ronetix" name="meta-ronetix" path="sources/meta-ronetix"/>
 
 </manifest>
