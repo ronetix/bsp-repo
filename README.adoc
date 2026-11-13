@@ -7,10 +7,23 @@
 === i.MX8MM-COMPACT-CM - SoM with i.MX8M Mini, 1 GB LPDDR4
 === i.MX8MM-COMPACT-2GB-CM - SoM with i.MX8M Mini, 2 GB LPDDR4
 === i.MX8MN-COMPACT-CM - SoM with i.MX8M Nano
+=== RNX-iMX93-SMARC - SoM with i.MX93, 2 GB LPDDR4X
+=== RNX-iMX93-OSM - SoM with i.MX93, 1 GB LPDDR4X
 
-Yocto Project wrynose with the FSL Community BSP. U-Boot 2025.01 from
-https://github.com/ronetix/u-boot (branch ronetix/v2025.01) and Linux 6.12
-from https://github.com/ronetix/linux (branch ronetix/6.12.x+fslc).
+Yocto Project wrynose with the FSL Community BSP. Every SoM boots U-Boot
+2025.01 from https://github.com/ronetix/u-boot (branch ronetix/v2025.01).
+
+The i.MX7 and i.MX8M SoMs run Linux 6.12 from
+https://github.com/ronetix/linux (branch ronetix/6.12.x+fslc), the
+mainline based kernel of the FSL community, and are built with an
+`fslc-*` distro.
+
+The i.MX93 SoMs run Linux 6.18 from the same repository (branch
+ronetix/6.18-1.0.x-imx), the NXP BSP kernel maintained by the FSL
+community, and need an NXP BSP distro: `fsl-wayland`, `fsl-xwayland` or
+`fsl-framebuffer`. The mainline kernel has no device nodes for the i.MX93
+display, camera, PXP, EdgeLock enclave or NPU, so an `fslc-*` distro
+builds linux-fslc, which has no device tree for these boards.
 
 To get the BSP you need to have `repo` installed and use it as:
 
@@ -36,7 +49,8 @@ $: repo sync
 At the end of the commands you have every metadata you need to start work with.
 
 `setup-environment` asks to accept the NXP EULA when a build directory is
-created. It is required for the DDR training firmware of the i.MX8M SoMs.
+created. It is required for the DDR training firmware of the i.MX8M and
+i.MX93 SoMs, and for the EdgeLock enclave firmware of the i.MX93.
 
 The images are development images: root logs in without password. See
 `sources/meta-ronetix/README.md` for production images.
@@ -183,6 +197,61 @@ Boot mode jumpers on base board i.MX8MM-COMPACT-MB for booting from SD card:
 * SW1[8:1]: OFF OFF OFF ON - OFF ON OFF OFF
 * SW4[2:1]: OFF OFF
 * J4: 1,2 - open; 3,4 - close; 5,6 - open
+
+RNX-iMX93-SMARC (CPU: i.MX93, 2 GB LPDDR4X)
+-------------------------------------------
+
+[source,console]
+$: MACHINE=rnx-imx93-smarc DISTRO=fsl-wayland . setup-environment build_wayland_rnx_imx93_smarc
+$: bitbake fsl-image-gui
+
+Writing the eMMC over USB with `uuu`, the NXP Universal Update Utility.
+Set the carrier to serial download mode on its BOOT_SEL header, connect
+the USB OTG port and run:
+
+[source,console]
+cd build_wayland_rnx_imx93_smarc
+sudo uuu -b emmc_all tmp/deploy/images/rnx-imx93-smarc/flash.bin \
+         tmp/deploy/images/rnx-imx93-smarc/fsl-image-gui-rnx-imx93-smarc.rootfs.wic.zst
+
+Creating a bootable SD card instead:
+
+[source,console]
+umount /dev/sdc1
+umount /dev/sdc2
+sudo bmaptool copy tmp/deploy/images/rnx-imx93-smarc/fsl-image-gui-rnx-imx93-smarc.rootfs.wic.gz /dev/sdc
+
+The same image boots from either the eMMC or the SD card: the root
+filesystem is found by its GPT partition label, not by a device node. It
+is built to the size of the root filesystem so that it fits the smallest
+eMMC, and on the first boot `ronetix-growfs` extends the root partition
+and its ext4 to the end of the device.
+
+RNX-iMX93-OSM (CPU: i.MX93, 1 GB LPDDR4X)
+-----------------------------------------
+
+[source,console]
+$: MACHINE=rnx-imx93-osm DISTRO=fsl-wayland . setup-environment build_wayland_rnx_imx93_osm
+$: bitbake fsl-image-gui
+
+This SoM carries an i.MX93 revision A0 die, which the machine
+configuration selects by default. The EdgeLock enclave container inside
+flash.bin is revision specific, and a flash.bin built with the container
+of the wrong revision does not boot at all, so for a module with an A2
+die add to conf/local.conf:
+
+[source,console]
+RONETIX_IMX93_SOC_REV = "A2"
+
+Revision A1 is not used on this SoM.
+
+Writing the eMMC and creating an SD card work as for the RNX-iMX93-SMARC
+above, with rnx-imx93-osm in place of rnx-imx93-smarc:
+
+[source,console]
+cd build_wayland_rnx_imx93_osm
+sudo uuu -b emmc_all tmp/deploy/images/rnx-imx93-osm/flash.bin \
+         tmp/deploy/images/rnx-imx93-osm/fsl-image-gui-rnx-imx93-osm.rootfs.wic.zst
 
 == Contributing
 
